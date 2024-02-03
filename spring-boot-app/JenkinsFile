@@ -16,7 +16,7 @@ pipeline {
     stage('Git Checkout') {
       steps {
         echo 'Cloning the application code...'
-        git branch: 'main', url: 'https://github.com/anselmenumbisia/jjtech-ci-cd-pipeline-project-k8s.git'
+        git branch: 'main', url: 'https://github.com/lwersiy/jjtech-ci-cd-pipeline-project-k8s.git'
       }
     }
 
@@ -89,7 +89,7 @@ pipeline {
     }
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = "http://44.201.109.93:9000/"
+        SONAR_URL = "http://54.158.13.48:9000/"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -110,12 +110,24 @@ pipeline {
        }
      }
 
+   stage('Install docker') {
+    steps {
+        script {
+            sh """
+                sudo yum install docker -y
+                sudo systemctl start docker
+                sudo systemctl enable docker
+                sudo usermod -a -G docker jenkins
+            """
+        }
+      }
+    }
 
     stage('Build and Push Docker Image') {
       environment {
-        awsAccountId = '389029577690'
+        awsAccountId = '989589514705'
         region = 'us-east-1'
-        repositoryName = 'jjtech-demo'
+        repositoryName = 'pipeline-repo'
         dockerImageTag = "${BUILD_NUMBER}"
         ecrRegistry = "${awsAccountId}.dkr.ecr.${region}.amazonaws.com"
       }
@@ -129,7 +141,7 @@ pipeline {
                 sh "docker tag ${repositoryName}:${dockerImageTag} ${ecrRegistry}/${repositoryName}:${dockerImageTag}"
                 sh "docker push ${ecrRegistry}/${repositoryName}:${dockerImageTag}"
                 sh "docker rmi ${ecrRegistry}/${repositoryName}:${dockerImageTag}"
-                sh " docker rmi ${repositoryName}:${dockerImageTag}"
+                sh "docker rmi ${repositoryName}:${dockerImageTag}"
       }
     }
 
