@@ -89,7 +89,7 @@ pipeline {
     }
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = "http://54.158.13.48:9000/"
+        SONAR_URL = "http://54.159.37.244:9000/"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -110,24 +110,24 @@ pipeline {
        }
      }
 
-   stage('Install docker') {
-    steps {
-        script {
-            sh """
-                sudo yum install docker -y
-                sudo systemctl start docker
-                sudo systemctl enable docker
-                sudo usermod -a -G docker jenkins
-            """
-        }
-      }
-    }
+  //  stage('Install docker') {
+  //   steps {
+  //       script {
+  //           sh """
+  //               sudo yum install docker -y
+  //               sudo systemctl start docker
+  //               sudo systemctl enable docker
+  //               sudo usermod -a -G docker jenkins
+  //           """
+  //       }
+  //     }
+  //   }
 
     stage('Build and Push Docker Image') {
       environment {
         awsAccountId = '989589514705'
         region = 'us-east-1'
-        repositoryName = 'pipeline-repo'
+        repositoryName = 'jjtech-demo'
         dockerImageTag = "${BUILD_NUMBER}"
         ecrRegistry = "${awsAccountId}.dkr.ecr.${region}.amazonaws.com"
       }
