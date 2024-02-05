@@ -4,11 +4,11 @@ terraform {
   backend "s3" {
     # Replace this with your bucket name!
     bucket         = "wersocicd"
-    key            = "jjtech/terraform.tfstate"
+    key            = "werso/terraform.tfstate"
     region         = "us-east-1"
 
     # Replace this with your DynamoDB table name!
-    dynamodb_table = "wersocicd"
+    dynamodb_table = "cicd"
   }
   
   required_providers {
