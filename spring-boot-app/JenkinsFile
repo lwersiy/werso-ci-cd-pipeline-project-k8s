@@ -16,7 +16,7 @@ pipeline {
     stage('Git Checkout') {
       steps {
         echo 'Cloning the application code...'
-        git branch: 'main', url: 'https://github.com/lwersiy/jjtech-ci-cd-pipeline-project-k8s.git'
+        git branch: 'main', url: 'https://github.com/lwersiy/werso-ci-cd-pipeline-project-k8s.git'
       }
     }
 
@@ -89,7 +89,7 @@ pipeline {
     }
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = "http://18.212.92.160:9000/"
+        SONAR_URL = "http://10.0.7.173:9000/"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -127,7 +127,7 @@ pipeline {
       environment {
         awsAccountId = '989589514705'
         region = 'us-east-1'
-        repositoryName = 'jjtech-demo'
+        repositoryName = 'pipeline-repo'
         dockerImageTag = "${BUILD_NUMBER}"
         ecrRegistry = "${awsAccountId}.dkr.ecr.${region}.amazonaws.com"
       }
