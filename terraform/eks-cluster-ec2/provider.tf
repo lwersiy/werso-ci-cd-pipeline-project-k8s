@@ -8,7 +8,7 @@ terraform {
     region         = "us-east-1"
 
     # Replace this with your DynamoDB table name!
-    dynamodb_table = "cicd"
+    dynamodb_table = "pipelinebackub"
   }
   
   required_providers {
